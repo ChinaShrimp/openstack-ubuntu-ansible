@@ -7,4 +7,7 @@
     chrony_cfg_servers: [ 'pool 0.europe.pool.ntp.org' ]
     chrony_cfg_serveroptions: 'offline iburst'
     chrony_cfg_allows: ['127.0.0.1', '::1', '{{ admin_subnet }}' ]
-    
+
+- name: install common softwares
+  include_role:
+    name: infracommon

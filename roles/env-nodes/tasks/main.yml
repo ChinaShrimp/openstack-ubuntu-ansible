@@ -7,3 +7,7 @@
     chrony_cfg_servers: [ 'pool {{ controller_ip }}' ]
     chrony_cfg_serveroptions: 'offline iburst'
     chrony_cfg_bindcmdaddresses: [ '127.0.0.1', '::1' ]
+
+- name: install common softwares
+  include_role:
+    name: infracommon
