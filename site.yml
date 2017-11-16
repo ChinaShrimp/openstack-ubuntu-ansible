@@ -1,8 +1,12 @@
 ---
 
-- hosts: all
+- hosts: controller-nodes
   roles:
-    - role: common
+    - role: env-controller
+
+- hosts: compute-nodes
+  roles:
+    - role: env-nodes
 
 # - hosts: controller-nodes
 #   roles:
