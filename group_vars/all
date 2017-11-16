@@ -1,3 +1,6 @@
+# OpenStack Admin Subnet
+admin_subnet: 192.168.221.0/24
+
 # APT Repository
 repo_fqdn: http.debian.net
 

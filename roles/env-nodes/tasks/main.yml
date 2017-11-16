@@ -1,2 +1,9 @@
 ---
 # tasks file for env-nodes
+- name: install chrony
+  include_role:
+    name: fahlke.chrony
+  vars:
+    chrony_cfg_servers: [ 'pool {{ controller_ip }}' ]
+    chrony_cfg_serveroptions: 'offline iburst'
+    chrony_cfg_bindcmdaddresses: [ '127.0.0.1', '::1' ]
