@@ -11,3 +11,7 @@
 - name: install common softwares
   include_role:
     name: infracommon
+
+- name: install dbserver
+  include_role:
+    name: dbserver
