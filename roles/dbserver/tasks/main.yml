@@ -1,13 +1,14 @@
 - name: Ensure mysql server and mysql python client are installed
   apt: pkg={{ item }} 
   with_items:
+    - mariadb-server
+    - python-pymysql
     - python-mysqldb
-    - mysql-server
 
 - name: Ensure mysql binds to internal interface
   template: >
-    src=etc/my.cnf 
-    dest=/etc/mysql/my.cnf 
+    src=etc/99-openstack.cnf 
+    dest=/etc/mysql/mariadb.conf.d/99-openstack.cnf 
     owner=root 
     group=root 
     mode=0644
