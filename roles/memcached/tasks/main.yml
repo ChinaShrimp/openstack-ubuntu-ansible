@@ -1,0 +1,15 @@
+---
+- name: install memcached
+  apt: pkg={{ item }}
+  with_items:
+    - memcached
+    - python-memcache
+
+- name: configure the service to use the management IP address of the controller node
+  template: >
+    src=memcached.conf
+    dest=/etc/memcached.conf
+    owner=root 
+    group=root 
+    mode=0644
+  notify: restart memcached

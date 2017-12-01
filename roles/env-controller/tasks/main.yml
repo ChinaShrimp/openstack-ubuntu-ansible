@@ -15,3 +15,15 @@
 - name: install dbserver
   include_role:
     name: dbserver
+
+# - hosts: controller-nodes
+#   roles:
+#     - role: dbserver_population
+
+- name: install rabbitserver
+  include_role:
+    name: rabbitserver
+
+- name: install memcached
+  include_role:
+    name: memcached
