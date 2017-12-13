@@ -1,3 +1,17 @@
+- name: ensure keystone database is present
+  mysql_db: name=keystone state=present
+
+- name: ensure keystone database user is present
+  mysql_user: >
+    name=keystone host={{ item }}
+    password={{ keystone_db_password }}
+    priv=keystone.*:ALL
+  with_items:
+    - "{{ controller_ip }}"
+    - 127.0.0.1
+    - localhost
+    - ::1
+
 - name: ensure keystone packages are installed
   apt: name={{ item }} 
   with_items:
@@ -5,10 +19,6 @@
     - python-keystone
     - python-keystoneclient
     - python-oslo.db
-  notify: restart keystone
-  
-- name: ensure sqlite keystone database is deleted
-  file: dest=/var/lib/keystone/keystone.db state=absent
 
 - name: ensure keystone config script is present
   template: >
@@ -21,4 +31,27 @@
 - name: DB sync for keystone
   shell: >
     /usr/bin/keystone-manage db_sync
-  notify: restart keystone
+  #notify: restart keystone
+
+# Initialize Fernet key repositories
+- shell: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
+- shell: keystone-manage credential_setup --keystone-user keystone --keystone-group keystone
+
+- shell: |
+    keystone-manage bootstrap --bootstrap-password {{ admin_pass }} \
+      --bootstrap-admin-url http://{{ controller_ip }}:35357/v3/ \
+      --bootstrap-internal-url http://{{ controller_ip }}:35357/v3/ \
+      --bootstrap-public-url http://{{ controller_ip }}:5000/v3/ \
+      --bootstrap-region-id {{ region }}
+
+- name: apache2 server name
+  template: >
+    src=etc/apache2/apache2.conf
+    dest=/etc/apache2/apache2.conf
+    owner=root
+    group=root
+    mode=0644
+  notify: restart apache2
+
+- name: ensure sqlite keystone database is deleted
+  file: dest=/var/lib/keystone/keystone.db state=absent

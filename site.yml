@@ -8,13 +8,9 @@
   roles:
     - role: env-nodes
 
-# - hosts: all
-#   roles:
-#     - role: openstackclient
-
-# - hosts: controller-nodes
-#   roles:
-#     - role: keystoneserver
+- hosts: controller-nodes
+  roles:
+    - role: keystoneserver
       
 # - hosts: controller-nodes
 #   roles:
