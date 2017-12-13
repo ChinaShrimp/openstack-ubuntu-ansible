@@ -31,7 +31,15 @@
 - name: DB sync for keystone
   shell: >
     /usr/bin/keystone-manage db_sync
-  #notify: restart keystone
+
+- name: change folder ownership to 'keystone' from 'root'
+  shell: >
+    chown -R keystone:keystone {{ item }}
+  with_items:
+    - /etc/keystone/
+    - /var/log/keystone/
+    - /usr/bin/keystone-wsgi*
+  notify: restart apache2
 
 # Initialize Fernet key repositories
 - shell: keystone-manage fernet_setup --keystone-user keystone --keystone-group keystone
