@@ -12,4 +12,10 @@
 #  apt: upgrade=yes update_cache=yes
 
 - name: Install OpenStack client
-  apt: name=python-openstackclient state=latest
+  apt: name={{item}} state=latest
+  with_items:
+    - python-pip
+    - python-openstackclient
+
+- name: Install required python lib shade
+  pip: name=shade version=1.8.0
